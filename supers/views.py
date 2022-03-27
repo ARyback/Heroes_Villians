@@ -19,14 +19,13 @@ def supers_list(request):
             serializer = SuperSerializer(queryset, many=True)
             return Response(serializer.data)
         else:
-            super_types = SuperType.object.all()
+            super_types = SuperType.objects.all()
             custom_response_dictionary = {}
             for super_type in super_types:
                 supers = Super.objects.filter(super_type_id=super_type.id)
-                supers_serializer = SuperSerializer(supers, many=True)
-                custom_response_dictionary[super_type.name] = {
-                    "type": super_type.type,
-                    "supers": supers_serializer.data
+                super_serializer = SuperSerializer(supers, many=True)
+                custom_response_dictionary[super_type.type] = {
+                    "supers": super_serializer.data
                 }
             return Response(custom_response_dictionary)
     elif request.method == 'POST':
